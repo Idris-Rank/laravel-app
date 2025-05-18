@@ -2,7 +2,7 @@ $(document).ready(function () {
 
 	console.log('script admin ready');
 
-	$('.btn-close-alert').click(function(event) {
+	$('.btn-close-alert').click(function (event) {
 
 		$(this).closest('.content-alert').remove();
 
@@ -34,6 +34,111 @@ $(document).ready(function () {
 							<path stroke-linecap="round" stroke-linejoin="round" d="M15 12a3 3 0 1 1-6 0 3 3 0 0 1 6 0Z" />
 						</svg>
 				`);
+
+		}
+
+	});
+
+	let token = $('meta[name="csrf-token"]').attr('content');
+
+	try {
+		var urlMediaStoreDec = urlMediaStore ? atob(urlMediaStore.replace(token, "")) : undefined;
+	} catch (error) { }
+
+	$('.btn-open-media-upload').click(function (event) {
+
+		$('#modal-media-upload').removeClass('hidden');
+
+	});
+
+	$('#input-media').on('change', function () {
+		const files = this.files;
+
+		if (files.length > 0) {
+			$('#preview-media').empty().removeClass('hidden');
+
+			Array.from(files).forEach(file => {
+				const reader = new FileReader();
+				reader.onload = function (e) {
+					const name = file.name;
+					$('#preview-media').append(`
+                    <img class="w-12 h-12 object-cover border rounded-lg mr-2 mb-2"
+                         src="${e.target.result}"
+                         alt="${name}" title="${name}">
+                `);
+				};
+				reader.readAsDataURL(file);
+			});
+		}
+	});
+
+	$('.btn-cancel-media-upload').click(function (event) {
+
+		$('#input-media').val('');
+
+		$('#preview-media').empty().addClass('hidden');
+
+		$('#modal-media-upload').addClass('hidden');
+
+	});
+
+	$('.btn-upload-media').click(function (e) {
+
+		e.preventDefault();
+
+		let thisBtn = $(this);
+
+		const formData = new FormData();
+		const files = $('[name="input_media[]"]')[0].files;
+
+		if (files.length > 0) {
+
+			// thisBtn.attr('disabled', 'disabled');
+
+			for (let i = 0; i < files.length; i++) {
+				formData.append('input_media[]', files[i]);
+			}
+
+			$.ajax({
+				url: urlMediaStoreDec,
+				type: 'POST',
+				headers: {
+					'X-CSRF-TOKEN': token
+				},
+				data: formData,
+				contentType: false,
+				processData: false,
+				success: function (data) {
+
+					if (data.status) {
+
+						$.each(data.files, function (key, value) {
+
+							$('.media-list').prepend(`
+								<div class="media col-span-2">
+                        <div class="btn-media-detail border cursor-pointer rounded-lg overflow-hidden">
+                            <img data-media-id="${value.id}" class="object-cover w-full h-36"
+                                src="${value.guid}"
+                                alt="${value.title}">
+                        </div>
+                    </div>
+								`);
+
+						});
+
+						$('#input-media').val('');
+
+						$('#preview-media').empty().addClass('hidden');
+
+						$('#modal-media-upload').addClass('hidden');
+
+					}
+
+				},
+				error: function (xhr) {
+					$('#response').html("Upload gagal!");
+				}
+			});
 
 		}
 

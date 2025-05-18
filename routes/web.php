@@ -4,6 +4,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\MediaController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -35,7 +36,10 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/admin/user/{id}', [UserController::class, 'update'])->name('admin-user-update');
     Route::delete('/admin/user/{id}', [UserController::class, 'destroy'])->name('admin-user-destroy');
 
-    Route::get('/auth/logout', [AuthController::class, 'logout'])->name('auth-logout');
+    Route::get('/admin/media', [MediaController::class, 'index'])->name('admin-media');
+    Route::post('/admin/media', [MediaController::class, 'store'])->name('admin-media-store');
+
+    Route::get('/admin/logout', [AuthController::class, 'logout'])->name('auth-admin-logout');
 
 });
 
