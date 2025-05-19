@@ -38,6 +38,10 @@ Route::middleware(['auth'])->group(function () {
 
     Route::get('/admin/media', [MediaController::class, 'index'])->name('admin-media');
     Route::post('/admin/media', [MediaController::class, 'store'])->name('admin-media-store');
+    Route::post('/admin/media/load-more', [MediaController::class, 'load_more'])->name('admin-media-load-more');
+    Route::get('/admin/media/detail', [MediaController::class, 'detail'])->name('admin-media-detail');
+    Route::put('/admin/media/{id?}', [MediaController::class, 'update'])->name('admin-media-update');
+    Route::delete('/admin/media/{id?}', [MediaController::class, 'destroy'])->name('admin-media-destroy');
 
     Route::get('/admin/logout', [AuthController::class, 'logout'])->name('auth-admin-logout');
 

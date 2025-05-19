@@ -1,6 +1,6 @@
 $(document).ready(function () {
 
-	console.log('script admin ready');
+	console.log('Script admin ready!');
 
 	$('.btn-close-alert').click(function (event) {
 
@@ -43,6 +43,22 @@ $(document).ready(function () {
 
 	try {
 		var urlMediaStoreDec = urlMediaStore ? atob(urlMediaStore.replace(token, "")) : undefined;
+	} catch (error) { }
+
+	try {
+		var urlMediaLoadMoreDec = urlMediaLoadMore ? atob(urlMediaLoadMore.replace(token, "")) : undefined;
+	} catch (error) { }
+
+	try {
+		var urlMediaDetailDec = urlMediaDetail ? atob(urlMediaDetail.replace(token, "")) : undefined;
+	} catch (error) { }
+
+	try {
+		var urlMediaUpdateDec = urlMediaUpdate ? atob(urlMediaUpdate.replace(token, "")) : undefined;
+	} catch (error) { }
+
+	try {
+		var urlMediaDestroyDec = urlMediaDestroy ? atob(urlMediaDestroy.replace(token, "")) : undefined;
 	} catch (error) { }
 
 	$('.btn-open-media-upload').click(function (event) {
@@ -112,16 +128,16 @@ $(document).ready(function () {
 
 					if (data.status) {
 
-						$.each(data.files, function (key, value) {
+						$.each(data.medias, function (key, value) {
 
 							$('.media-list').prepend(`
 								<div class="media col-span-2">
-                        <div class="btn-media-detail border cursor-pointer rounded-lg overflow-hidden">
-                            <img data-media-id="${value.id}" class="object-cover w-full h-36"
-                                src="${value.guid}"
-                                alt="${value.title}">
-                        </div>
-                    </div>
+									<div class="btn-media-detail border cursor-pointer rounded-lg overflow-hidden">
+										<img data-media-id="${value.id}" class="object-cover w-full h-36"
+											src="${value.guid}"
+											alt="${value.title}">
+									</div>
+								</div>
 								`);
 
 						});
@@ -132,6 +148,10 @@ $(document).ready(function () {
 
 						$('#modal-media-upload').addClass('hidden');
 
+						$('.showing').text(parseInt($('.showing').text()) + data.medias.length);
+
+						$('.count-media').text(data.count_media);
+
 					}
 
 				},
@@ -141,6 +161,222 @@ $(document).ready(function () {
 			});
 
 		}
+
+	});
+
+	$('.btn-load-more-media').click(function (e) {
+
+		e.preventDefault();
+
+		let thisBtn = $(this);
+
+		let page = thisBtn.attr('data-page');
+
+		const formData = new FormData();
+		formData.append('page', page);
+
+		thisBtn.find('span').addClass('animate-pulse').text('Loading');
+
+		$.ajax({
+			url: urlMediaLoadMoreDec,
+			type: 'POST',
+			headers: {
+				'X-CSRF-TOKEN': token
+			},
+			data: formData,
+			contentType: false,
+			processData: false,
+			success: function (data) {
+
+				if (data.status) {
+
+					$.each(data.medias, function (key, value) {
+
+						$('.media-list').append(`
+							<div class="media col-span-2">
+								<div class="btn-media-detail border cursor-pointer rounded-lg overflow-hidden">
+									<img data-media-id="${value.id}" class="object-cover w-full h-36"
+										src="${value.guid}"
+										alt="${value.title}">
+								</div>
+							</div>
+						`);
+
+					});
+
+					thisBtn.attr('data-page', parseInt(page) + 1);
+
+					$('.showing').text(parseInt($('.showing').text()) + data.medias.length);
+
+					$('.count-media').text(data.count_media);
+
+					thisBtn.find('span').removeClass('animate-pulse').text('Load more');
+
+				}
+
+			},
+			error: function (xhr) {
+				$('#response').html("Upload gagal!");
+			}
+		});
+
+	});
+
+	$('html').on('click', '.btn-media-detail', function (e) {
+
+		e.preventDefault();
+
+		let thisBtn = $(this);
+
+		let mediaId = thisBtn.find('img').attr('data-media-id');
+
+		$.ajax({
+			url: urlMediaDetailDec,
+			type: 'GET',
+			data: {
+				media_id: mediaId
+			},
+			success: function (data) {
+
+				let modalMediaDetail = $('#modal-media-detail');
+
+				if (data.status) {
+
+					modalMediaDetail.removeClass('hidden');
+
+					modalMediaDetail.find('img').attr('src', data.media.guid);
+					modalMediaDetail.find('img').attr('alt', data.media.title);
+					modalMediaDetail.find('[name="media_id"]').val(data.media.id);
+					modalMediaDetail.find('[name="title"]').val(data.media.title);
+					modalMediaDetail.find('[name="slug"]').val(data.media.slug);
+					modalMediaDetail.find('[name="caption"]').val(data.media.excerpt);
+					modalMediaDetail.find('[name="url"]').val(data.media.guid);
+					modalMediaDetail.find('.upload-by').text(data.media.user.name);
+					modalMediaDetail.find('.upload-at').text(data.media.created_at);
+					modalMediaDetail.find('.type').text(data.media.type);
+
+				}
+
+				console.log(data);
+
+			},
+			error: function (xhr) {
+				$('#response').html("Upload gagal!");
+			}
+		});
+
+	});
+
+	$('.btn-close-media-detail').click(function (e) {
+
+		e.preventDefault();
+
+		$('#modal-media-detail').addClass('hidden');
+
+	});
+
+	$('.btn-media-update').click(function (e) {
+
+		e.preventDefault();
+
+		let thisBtn = $(this);
+
+		let modalMediaDetail = $('#modal-media-detail');
+
+		let mediaId = modalMediaDetail.find('[name="media_id"]').val();
+		let mediaTitle = modalMediaDetail.find('[name="title"]').val();
+		let mediaSlug = modalMediaDetail.find('[name="slug"]').val();
+		let caption = modalMediaDetail.find('[name="caption"]').val();
+
+		const formData = new FormData();
+		formData.append('_method', 'PUT');
+		formData.append('media_id', mediaId);
+		formData.append('title', mediaTitle);
+		formData.append('slug', mediaSlug);
+		formData.append('caption', caption);
+
+		thisBtn.find('span').addClass('animate-pulse').text('Loading');
+
+		$.ajax({
+			url: urlMediaUpdateDec + '/' + mediaId,
+			type: 'POST',
+			headers: {
+				'X-CSRF-TOKEN': token
+			},
+			data: formData,
+			contentType: false,
+			processData: false,
+			success: function (data) {
+
+				if (data.status) {
+
+					thisBtn.find('span').removeClass('animate-pulse').text('Update');
+
+				}
+
+			},
+			error: function (xhr) {
+				$('#response').html("Upload gagal!");
+			}
+		});
+
+	});
+
+	$('.btn-media-delete').click(function (e) {
+
+		e.preventDefault();
+
+		let thisBtn = $(this);
+
+		let modalMediaDetail = $('#modal-media-detail');
+
+		let mediaId = modalMediaDetail.find('[name="media_id"]').val();
+
+		const formData = new FormData();
+		formData.append('_method', 'DELETE');
+		formData.append('media_id', mediaId);
+
+		thisBtn.find('span').addClass('animate-pulse').text('Loading');
+
+		$.ajax({
+			url: urlMediaDestroyDec + '/' + mediaId,
+			type: 'POST',
+			headers: {
+				'X-CSRF-TOKEN': token
+			},
+			data: formData,
+			contentType: false,
+			processData: false,
+			success: function (data) {
+
+				if (data.status) {
+
+					modalMediaDetail.addClass('hidden');
+
+					thisBtn.find('span').removeClass('animate-pulse').text('Delete');
+
+					$('.showing').text(parseInt($('.showing').text()) - 1);
+
+					$('.count-media').text(data.count_media);
+
+					$('.btn-media-detail').find('img[data-media-id="' + mediaId + '"]').remove();
+
+				}
+
+			},
+			error: function (err, textStatus, errorThrown) {
+				let response = err.responseJSON;
+
+				if (response && response.message) {
+					alert('Error: ' + response.message);
+				} else {
+					alert('Terjadi kesalahan: ' + errorThrown);
+				}
+
+				console.error('Detail error:', err);
+			}
+
+		});
 
 	});
 
