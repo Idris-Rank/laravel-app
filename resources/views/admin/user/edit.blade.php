@@ -3,14 +3,21 @@
 @section('title', 'Edit User')
 
 @php
-    
+
     $user_id = $user->id;
     $name = $user->name;
     $slug = $user->slug;
     $email = $user->email;
     $role_id = $user->role_id;
+    $image_id = $user->image_id;
 
 @endphp
+
+@section('media')
+
+@include('admin.template.components.media')
+
+@endsection
 
 @section('content')
 
@@ -74,7 +81,8 @@
                                         class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                         @foreach ($roles as $k_role => $v_role)
                                             <option value="{{ $v_role->id }}"
-                                                {{ old('role') == $v_role->id || $role_id == $v_role->id ? 'selected' : '' }}>{{ $v_role->name }}
+                                                {{ old('role') == $v_role->id || $role_id == $v_role->id ? 'selected' : '' }}>
+                                                {{ $v_role->name }}
                                             </option>
                                         @endforeach
                                     </select>
@@ -90,7 +98,7 @@
                                 <div class="mt-1">
                                     <div class="relative">
                                         <input type="password" name="password" id="password" placeholder="*****"
-                                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-c1-600 sm:text-sm sm:leading-6">
+                                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                         <span
                                             class="btn-toggle-password absolute top-0 right-0 text-gray-800 flex h-full items-center px-2 cursor-pointer hover:text-blue-500">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -115,7 +123,7 @@
                                     <div class="relative">
                                         <input type="password" name="confirm_password" id="confirm-password"
                                             placeholder="*****"
-                                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-c1-600 sm:text-sm sm:leading-6">
+                                            class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
                                         <span
                                             class="btn-toggle-password absolute top-0 right-0 text-gray-800 flex h-full items-center px-2 cursor-pointer hover:text-blue-500">
                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
@@ -159,6 +167,68 @@
                                     </button>
                                 </div>
                             </div>
+
+                            <div class="bg-white rounded-md shadow-sm border">
+                                <div class="border-b p-4">
+                                    <div class="text-lg font-bold">
+                                        Featured image
+                                    </div>
+                                </div>
+
+                                <div class="p-4 space-y-1">
+                                    <div class="media box-image col-span-12 lg:col-span-3 space-y-1">
+                                        <div class="w-full h-full">
+                                            <div
+                                                class="btn-open-media {{ $image_id ? 'hidden' : '' }} relative group cursor-pointer duration-300 bg-gray-100 hover:bg-gray-200 rounded-md w-full h-full flex items-center justify-center max-h-40">
+                                                <div class="flex flex-col items-center justify-center py-8">
+                                                    <div>
+                                                        <svg class="text-gray-400 h-10 w-10" fill="currentColor"
+                                                            xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                            <path class="fa-secondary" opacity=".4"
+                                                                d="M0 96L0 416c0 35.3 28.7 64 64 64l384 0c35.3 0 64-28.7 64-64l0-256c0-35.3-28.7-64-64-64L288 96c-10.1 0-19.6-4.7-25.6-12.8L243.2 57.6C231.1 41.5 212.1 32 192 32L64 32C28.7 32 0 60.7 0 96zM160 272c0-6.1 2.3-12.3 7-17l72-72c4.7-4.7 10.8-7 17-7s12.3 2.3 17 7l72 72c4.7 4.7 7 10.8 7 17s-2.3 12.3-7 17c-9.4 9.4-24.6 9.4-33.9 0l-31-31L280 360c0 13.3-10.7 24-24 24s-24-10.7-24-24l0-102.1-31 31c-9.4 9.4-24.6 9.4-33.9 0c-4.7-4.7-7-10.8-7-17z">
+                                                            </path>
+                                                            <path class="fa-primary"
+                                                                d="M256 384c13.3 0 24-10.7 24-24l0-102.1 31 31c9.4 9.4 24.6 9.4 33.9 0s9.4-24.6 0-33.9l-72-72c-9.4-9.4-24.6-9.4-33.9 0l-72 72c-9.4 9.4-9.4 24.6 0 33.9s24.6 9.4 33.9 0l31-31L232 360c0 13.3 10.7 24 24 24z">
+                                                            </path>
+                                                        </svg>
+                                                    </div>
+                                                    <div
+                                                        class="text-center text-sm font-semibold text-gray-500 group-hover:text-gray-700 duration-300">
+                                                        Upload media
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            @if ($image_id)
+                                                @php
+                                                    $image_url = $user->media->guid;
+                                                @endphp
+
+                                                <div class="image">
+                                                    <div class="w-full h-full rounded-md overflow-hidden">
+                                                        <img src="{{ $image_url }}"
+                                                            class="h-full w-full object-cover">
+                                                        <input type="hidden" name="image"
+                                                            value="{{ $image_id }}">
+                                                    </div>
+                                                </div>
+                                            @else
+                                                <div class="image hidden">
+                                                    <div class="w-full h-full rounded-md overflow-hidden">
+                                                        <img src="" class="h-full w-full object-cover">
+                                                        <input type="hidden" name="image" value="0">
+                                                    </div>
+                                                </div>
+                                            @endif
+
+                                        </div>
+                                        <div
+                                            class="btn-remove-image {{ $image_id ? '' : 'hidden' }} cursor-pointer hover:text-indigo-600 text-sm underline text-indigo-500">
+                                            Remove image</div>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                     </div>
                 </div>
@@ -169,4 +239,5 @@
 @endsection
 
 @section('script')
+
 @endsection

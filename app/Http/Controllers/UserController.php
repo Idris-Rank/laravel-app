@@ -106,13 +106,13 @@ class UserController extends Controller
     public function edit(Request $request, $id)
     {
 
-        $user = User::whereIn('id', [$id])->first();
+        $user = User::with(['media'])->whereIn('id', [$id])->first();
 
         if ($user) {
 
             $data = [];
 
-            $data['user'] = User::whereIn('id', [$id])->first();
+            $data['user'] = $user;
             $data['roles'] = Role::get();
 
             return view('admin.user.edit', $data);
@@ -163,6 +163,7 @@ class UserController extends Controller
                 $data_update['slug'] = $request->input('slug') ? Str::slug($request->input('slug')) : Str::slug($request->input('name'));
                 $data_update['email'] = $request->input('email');
                 $data_update['role_id'] = $inp_role_id;
+                $data_update['image_id'] = $request->input('image');
                 $data_update['updated_at'] = now();
 
                 User::where('id', $user_id)->update($data_update);

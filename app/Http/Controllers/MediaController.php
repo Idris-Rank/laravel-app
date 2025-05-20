@@ -208,4 +208,22 @@ class MediaController extends Controller
 
         }
     }
+
+    public function archive(Request $request)
+    {
+        $page = $request->input('page');
+
+        $per_page = 20;
+
+        $medias = Media::skip($per_page * ($page - 1))->take($per_page)->orderBy('id', 'desc')->get();
+
+        $count_media = Media::count();
+
+        return response()->json([
+            'status' => true,
+            'message' => 'Success!',
+            'medias' => $medias,
+            'count_media' => $count_media,
+        ], 200);
+    }
 }

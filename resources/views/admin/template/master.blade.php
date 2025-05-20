@@ -4,9 +4,12 @@
 @include('admin.template.head')
 
 <body>
+
     <div>
         
         @include('admin.template.sidebar')
+
+            @yield('media')
 
         <div class="lg:pl-72">
             
