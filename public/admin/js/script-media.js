@@ -1,101 +1,105 @@
-$(document).ready(function () {
+$(document).ready(function() {
 
     console.log('Script media ready!');
-    
+
     let token = $('meta[name="csrf-token"]').attr('content');
 
-	try {
-		var urlMediaStoreDec = urlMediaStore ? atob(urlMediaStore.replace(token, "")) : undefined;
-	} catch (error) { }
+    try {
+        var urlMediaStoreDec = urlMediaStore ? atob(urlMediaStore.replace(token, "")) : undefined;
+    } catch (error) {}
 
-	try {
-		var urlMediaLoadMoreDec = urlMediaLoadMore ? atob(urlMediaLoadMore.replace(token, "")) : undefined;
-	} catch (error) { }
+    try {
+        var urlMediaLoadMoreDec = urlMediaLoadMore ? atob(urlMediaLoadMore.replace(token, "")) : undefined;
+    } catch (error) {}
 
-	try {
-		var urlMediaDetailDec = urlMediaDetail ? atob(urlMediaDetail.replace(token, "")) : undefined;
-	} catch (error) { }
+    try {
+        var urlMediaDetailDec = urlMediaDetail ? atob(urlMediaDetail.replace(token, "")) : undefined;
+    } catch (error) {}
 
-	try {
-		var urlMediaUpdateDec = urlMediaUpdate ? atob(urlMediaUpdate.replace(token, "")) : undefined;
-	} catch (error) { }
+    try {
+        var urlMediaUpdateDec = urlMediaUpdate ? atob(urlMediaUpdate.replace(token, "")) : undefined;
+    } catch (error) {}
 
-	try {
-		var urlMediaDestroyDec = urlMediaDestroy ? atob(urlMediaDestroy.replace(token, "")) : undefined;
-	} catch (error) { }
+    try {
+        var urlMediaDestroyDec = urlMediaDestroy ? atob(urlMediaDestroy.replace(token, "")) : undefined;
+    } catch (error) {}
 
-	$('.btn-open-upload-media').click(function (event) {
+    try {
+        var urlMediaSearchDec = urlMediaSearch ? atob(urlMediaSearch.replace(token, "")) : undefined;
+    } catch (error) {}
 
-		$('#modal-upload-media').removeClass('hidden');
+    $('.btn-open-upload-media').click(function(event) {
 
-	});
+        $('#modal-upload-media').removeClass('hidden');
 
-	$('#input-media').on('change', function () {
-		const files = this.files;
+    });
 
-		if (files.length > 0) {
-			$('#preview-media').empty().removeClass('hidden');
+    $('#input-media').on('change', function() {
+        const files = this.files;
 
-			Array.from(files).forEach(file => {
-				const reader = new FileReader();
-				reader.onload = function (e) {
-					const name = file.name;
-					$('#preview-media').append(`
+        if (files.length > 0) {
+            $('#preview-media').empty().removeClass('hidden');
+
+            Array.from(files).forEach(file => {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const name = file.name;
+                    $('#preview-media').append(`
                     <img class="w-12 h-12 object-cover border rounded-lg mr-2 mb-2"
                          src="${e.target.result}"
                          alt="${name}" title="${name}">
-                `);
-				};
-				reader.readAsDataURL(file);
-			});
-		}
-	});
+					`);
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    });
 
-	$('.btn-cancel-media-upload').click(function (event) {
+    $('.btn-cancel-media-upload').click(function(event) {
 
-		$('#input-media').val('');
+        $('#input-media').val('');
 
-		$('#preview-media').empty().addClass('hidden');
+        $('#preview-media').empty().addClass('hidden');
 
-		$('#modal-upload-media').addClass('hidden');
+        $('#modal-upload-media').addClass('hidden');
 
-	});
+    });
 
-	$('.btn-upload-media').click(function (e) {
+    $('.btn-upload-media').click(function(e) {
 
-		e.preventDefault();
+        e.preventDefault();
 
-		let thisBtn = $(this);
+        let thisBtn = $(this);
 
-		const formData = new FormData();
-		const files = $('[name="input_media[]"]')[0].files;
+        const formData = new FormData();
+        const files = $('[name="input_media[]"]')[0].files;
 
-		if (files.length > 0) {
+        if (files.length > 0) {
 
-			// thisBtn.attr('disabled', 'disabled');
+            // thisBtn.attr('disabled', 'disabled');
 
-			thisBtn.find('span').addClass('animate-pulse').text('Loading');
+            thisBtn.find('span').addClass('animate-pulse').text('Loading');
 
-			for (let i = 0; i < files.length; i++) {
-				formData.append('input_media[]', files[i]);
-			}
+            for (let i = 0; i < files.length; i++) {
+                formData.append('input_media[]', files[i]);
+            }
 
-			$.ajax({
-				url: urlMediaStoreDec,
-				type: 'POST',
-				headers: {
-					'X-CSRF-TOKEN': token
-				},
-				data: formData,
-				contentType: false,
-				processData: false,
-				success: function (data) {
+            $.ajax({
+                url: urlMediaStoreDec,
+                type: 'POST',
+                headers: {
+                    'X-CSRF-TOKEN': token
+                },
+                data: formData,
+                contentType: false,
+                processData: false,
+                success: function(data) {
 
-					if (data.status) {
+                    if (data.status) {
 
-						$.each(data.medias, function (key, value) {
+                        $.each(data.medias, function(key, value) {
 
-							$('.media-list').prepend(`
+                            $('.media-list').prepend(`
 								<div class="media col-span-2">
 									<div class="btn-detail-media border cursor-pointer rounded-lg overflow-hidden">
 										<img data-media-id="${value.id}" class="object-cover w-full h-36"
@@ -103,63 +107,75 @@ $(document).ready(function () {
 											alt="${value.title}">
 									</div>
 								</div>
-								`);
+							`);
 
-						});
+                        });
 
-						$('#input-media').val('');
+                        $('#input-media').val('');
 
-						$('#preview-media').empty().addClass('hidden');
+                        $('#preview-media').empty().addClass('hidden');
 
-						$('#modal-upload-media').addClass('hidden');
+                        $('#modal-upload-media').addClass('hidden');
 
-						$('.showing').text(parseInt($('.showing').text()) + data.medias.length);
+                        $('.showing').text(parseInt($('.showing').text()) + data.medias.length);
 
-						$('.count-media').text(data.count_media);
+                        $('.count-media').text(data.count_media);
 
-						thisBtn.find('span').removeClass('animate-pulse').text('Upload');
+                        thisBtn.find('span').removeClass('animate-pulse').text('Upload');
 
-					}
+                    }
 
-				},
-				error: function (xhr) {
-					$('#response').html("Upload gagal!");
-				}
-			});
+                },
+                error: function(err, textStatus, errorThrown) {
+                    let response = err.responseJSON;
 
-		}
+                    if (response && response.message) {
+                        alert('Error: ' + response.message);
+                    } else {
+                        alert('Terjadi kesalahan: ' + errorThrown);
+                    }
 
-	});
+                    console.error('Detail error:', err);
+                }
+            });
 
-	$('.btn-load-more-media').click(function (e) {
+        }
 
-		e.preventDefault();
+    });
 
-		let thisBtn = $(this);
+    $('.btn-load-more-media').click(function(e) {
 
-		let page = thisBtn.attr('data-page');
+        e.preventDefault();
 
-		const formData = new FormData();
-		formData.append('page', page);
+        let thisBtn = $(this);
 
-		thisBtn.find('span').addClass('animate-pulse').text('Loading');
+        let containerMedia = thisBtn.closest('.container-media');
 
-		$.ajax({
-			url: urlMediaLoadMoreDec,
-			type: 'POST',
-			headers: {
-				'X-CSRF-TOKEN': token
-			},
-			data: formData,
-			contentType: false,
-			processData: false,
-			success: function (data) {
+        let page = thisBtn.attr('data-page');
+        let search = containerMedia.find('#search_media').val().trim();
 
-				if (data.status) {
+        const formData = new FormData();
+        formData.append('page', page);
+        formData.append('search', search);
 
-					$.each(data.medias, function (key, value) {
+        thisBtn.find('span').addClass('animate-pulse').text('Loading');
 
-						$('.media-list').append(`
+        $.ajax({
+            url: urlMediaLoadMoreDec,
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': token
+            },
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+
+                if (data.status) {
+
+                    $.each(data.medias, function(key, value) {
+
+                        $('.media-list').append(`
 							<div class="media col-span-2">
 								<div class="btn-detail-media border cursor-pointer rounded-lg overflow-hidden">
 									<img data-media-id="${value.id}" class="object-cover w-full h-36"
@@ -169,169 +185,136 @@ $(document).ready(function () {
 							</div>
 						`);
 
-					});
+                    });
 
-					thisBtn.attr('data-page', parseInt(page) + 1);
+                    thisBtn.attr('data-page', parseInt(page) + 1);
 
-					$('.showing').text(parseInt($('.showing').text()) + data.medias.length);
+                    containerMedia.find('.showing').text(parseInt(containerMedia.find('.showing').text()) + parseInt(data.medias.length));
 
-					$('.count-media').text(data.count_media);
+                    containerMedia.find('.count-media').text(data.count_media);
 
-					thisBtn.find('span').removeClass('animate-pulse').text('Load more');
+                    thisBtn.find('span').removeClass('animate-pulse').text('Load more');
 
-				}
+                }
 
-			},
-			error: function (xhr) {
-				$('#response').html("Upload gagal!");
-			}
-		});
+            },
+            error: function(err, textStatus, errorThrown) {
+                let response = err.responseJSON;
 
-	});
+                if (response && response.message) {
+                    alert('Error: ' + response.message);
+                } else {
+                    alert('Terjadi kesalahan: ' + errorThrown);
+                }
 
-	$('html').on('click', '.btn-detail-media', function (e) {
+                console.error('Detail error:', err);
+            }
+        });
 
-		e.preventDefault();
+    });
 
-		let thisBtn = $(this);
+    $('html').on('click', '.btn-detail-media', function(e) {
 
-		let mediaId = thisBtn.find('img').attr('data-media-id');
+        e.preventDefault();
 
-		$.ajax({
-			url: urlMediaDetailDec,
-			type: 'GET',
-			data: {
-				media_id: mediaId
-			},
-			success: function (data) {
+        let thisBtn = $(this);
 
-				let modalMediaDetail = $('#modal-detail-media');
+        let mediaId = thisBtn.find('img').attr('data-media-id');
 
-				if (data.status) {
+        $.ajax({
+            url: urlMediaDetailDec,
+            type: 'GET',
+            data: {
+                media_id: mediaId
+            },
+            success: function(data) {
 
-					modalMediaDetail.removeClass('hidden');
+                let modalMediaDetail = $('#modal-detail-media');
 
-					modalMediaDetail.find('img').attr('src', data.media.guid);
-					modalMediaDetail.find('img').attr('alt', data.media.title);
-					modalMediaDetail.find('[name="media_id"]').val(data.media.id);
-					modalMediaDetail.find('[name="title"]').val(data.media.title);
-					modalMediaDetail.find('[name="slug"]').val(data.media.slug);
-					modalMediaDetail.find('[name="caption"]').val(data.media.excerpt);
-					modalMediaDetail.find('[name="url"]').val(data.media.guid);
-					modalMediaDetail.find('.upload-by').text(data.media.user.name);
-					modalMediaDetail.find('.upload-at').text(data.media.created_at);
-					modalMediaDetail.find('.type').text(data.media.type);
+                if (data.status) {
 
-				}
+                    modalMediaDetail.removeClass('hidden');
 
-				console.log(data);
+                    modalMediaDetail.find('img').attr('src', data.media.guid);
+                    modalMediaDetail.find('img').attr('alt', data.media.title);
+                    modalMediaDetail.find('[name="media_id"]').val(data.media.id);
+                    modalMediaDetail.find('[name="title"]').val(data.media.title);
+                    modalMediaDetail.find('[name="slug"]').val(data.media.slug);
+                    modalMediaDetail.find('[name="caption"]').val(data.media.excerpt);
+                    modalMediaDetail.find('[name="url"]').val(data.media.guid);
+                    modalMediaDetail.find('.upload-by').text(data.media.user.name);
+                    modalMediaDetail.find('.upload-at').text(data.media.created_at);
+                    modalMediaDetail.find('.type').text(data.media.type);
 
-			},
-			error: function (xhr) {
-				$('#response').html("Upload gagal!");
-			}
-		});
+                }
 
-	});
+                console.log(data);
 
-	$('.btn-close-media-detail').click(function (e) {
+            },
+            error: function(err, textStatus, errorThrown) {
+                let response = err.responseJSON;
 
-		e.preventDefault();
+                if (response && response.message) {
+                    alert('Error: ' + response.message);
+                } else {
+                    alert('Terjadi kesalahan: ' + errorThrown);
+                }
 
-		$('#modal-detail-media').addClass('hidden');
+                console.error('Detail error:', err);
+            }
+        });
 
-	});
+    });
 
-	$('.btn-update-media').click(function (e) {
+    $('.btn-close-media-detail').click(function(e) {
 
-		e.preventDefault();
+        e.preventDefault();
 
-		let thisBtn = $(this);
+        $('#modal-detail-media').addClass('hidden');
 
-		let modalMediaDetail = $('#modal-detail-media');
+    });
 
-		let mediaId = modalMediaDetail.find('[name="media_id"]').val();
-		let mediaTitle = modalMediaDetail.find('[name="title"]').val();
-		let mediaSlug = modalMediaDetail.find('[name="slug"]').val();
-		let caption = modalMediaDetail.find('[name="caption"]').val();
+    $('.btn-update-media').click(function(e) {
 
-		const formData = new FormData();
-		formData.append('_method', 'PUT');
-		formData.append('media_id', mediaId);
-		formData.append('title', mediaTitle);
-		formData.append('slug', mediaSlug);
-		formData.append('caption', caption);
+        e.preventDefault();
 
-		thisBtn.find('span').addClass('animate-pulse').text('Loading');
+        let thisBtn = $(this);
 
-		$.ajax({
-			url: urlMediaUpdateDec + '/' + mediaId,
-			type: 'POST',
-			headers: {
-				'X-CSRF-TOKEN': token
-			},
-			data: formData,
-			contentType: false,
-			processData: false,
-			success: function (data) {
+        let modalMediaDetail = $('#modal-detail-media');
 
-				if (data.status) {
+        let mediaId = modalMediaDetail.find('[name="media_id"]').val();
+        let mediaTitle = modalMediaDetail.find('[name="title"]').val();
+        let mediaSlug = modalMediaDetail.find('[name="slug"]').val();
+        let caption = modalMediaDetail.find('[name="caption"]').val();
 
-					thisBtn.find('span').removeClass('animate-pulse').text('Update');
+        const formData = new FormData();
+        formData.append('_method', 'PUT');
+        formData.append('media_id', mediaId);
+        formData.append('title', mediaTitle);
+        formData.append('slug', mediaSlug);
+        formData.append('caption', caption);
 
-				}
+        thisBtn.find('span').addClass('animate-pulse').text('Loading');
 
-			},
-			error: function (xhr) {
-				$('#response').html("Upload gagal!");
-			}
-		});
+        $.ajax({
+            url: urlMediaUpdateDec + '/' + mediaId,
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': token
+            },
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
 
-	});
+                if (data.status) {
 
-	$('.btn-delete-media').click(function (e) {
+                    thisBtn.find('span').removeClass('animate-pulse').text('Update');
 
-		e.preventDefault();
+                }
 
-		let thisBtn = $(this);
-
-		let modalMediaDetail = $('#modal-detail-media');
-
-		let mediaId = modalMediaDetail.find('[name="media_id"]').val();
-
-		const formData = new FormData();
-		formData.append('_method', 'DELETE');
-		formData.append('media_id', mediaId);
-
-		thisBtn.find('span').addClass('animate-pulse').text('Loading');
-
-		$.ajax({
-			url: urlMediaDestroyDec + '/' + mediaId,
-			type: 'POST',
-			headers: {
-				'X-CSRF-TOKEN': token
-			},
-			data: formData,
-			contentType: false,
-			processData: false,
-			success: function (data) {
-
-				if (data.status) {
-
-					modalMediaDetail.addClass('hidden');
-
-					thisBtn.find('span').removeClass('animate-pulse').text('Delete');
-
-					$('.showing').text(parseInt($('.showing').text()) - 1);
-
-					$('.count-media').text(data.count_media);
-
-					$('.btn-detail-media').find('img[data-media-id="' + mediaId + '"]').closest('.media').remove();
-
-				}
-
-			},
-			error: function (err, textStatus, errorThrown) {
+            },
+            error: function (err, textStatus, errorThrown) {
 				let response = err.responseJSON;
 
 				if (response && response.message) {
@@ -342,64 +325,183 @@ $(document).ready(function () {
 
 				console.error('Detail error:', err);
 			}
+        });
 
-		});
+    });
 
-	});
+    $('.btn-delete-media').click(function(e) {
 
-	let thisBtnMedia;
+        e.preventDefault();
 
-	$('.btn-open-media').click(function (e) {
+        let thisBtn = $(this);
 
-		thisBtnMedia = $(this);
+        let modalMediaDetail = $('#modal-detail-media');
 
-		$('.btn-set-media').removeClass('hidden');
+        let mediaId = modalMediaDetail.find('[name="media_id"]').val();
 
-		e.preventDefault();
+        const formData = new FormData();
+        formData.append('_method', 'DELETE');
+        formData.append('media_id', mediaId);
 
-		$('.btn-load-more-media').click();
+        thisBtn.find('span').addClass('animate-pulse').text('Loading');
 
-		$('#modal-media').removeClass('hidden');
+        $.ajax({
+            url: urlMediaDestroyDec + '/' + mediaId,
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': token
+            },
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
 
-	});
+                if (data.status) {
 
-	$('.btn-close-media').click(function (e) {
+                    modalMediaDetail.addClass('hidden');
 
-		e.preventDefault();
+                    thisBtn.find('span').removeClass('animate-pulse').text('Delete');
 
-		$('#modal-media').addClass('hidden');
+                    $('.showing').text(parseInt($('.showing').text()) - 1);
 
-	});
+                    $('.count-media').text(data.count_media);
 
-	$('.btn-set-media').click(function (e) {
+                    $('.btn-detail-media').find('img[data-media-id="' + mediaId + '"]').closest('.media').remove();
 
-		e.preventDefault();
+                }
 
-		let mediaId = $('#modal-detail-media').find('[name="media_id"]').val();
-		let url = $('#modal-detail-media').find('[name="url"]').val();
+            },
+            error: function(err, textStatus, errorThrown) {
+                let response = err.responseJSON;
 
-		thisBtnMedia.closest('.media').find('input').val(mediaId);
-		thisBtnMedia.closest('.media').find('img').attr('src', url);
-		thisBtnMedia.closest('.media').find('.image').removeClass('hidden');
-		thisBtnMedia.closest('.media').find('.btn-open-media').addClass('hidden');
-		thisBtnMedia.closest('.media').find('.btn-remove-image').removeClass('hidden');
+                if (response && response.message) {
+                    alert('Error: ' + response.message);
+                } else {
+                    alert('Terjadi kesalahan: ' + errorThrown);
+                }
 
-		$('#modal-media').addClass('hidden');
-		$('#modal-detail-media').addClass('hidden');
+                console.error('Detail error:', err);
+            }
 
+        });
 
-	});
+    });
 
-	$('.btn-remove-image').click(function (e) {
+    let thisBtnMedia;
 
-		e.preventDefault();
+    $('.btn-open-media').click(function(e) {
 
-		$(this).closest('.media').find('input').val(0);
-		$(this).closest('.media').find('img').attr('src', '');
-		$(this).closest('.media').find('.image').addClass('hidden');
-		$(this).closest('.media').find('.btn-open-media').removeClass('hidden');
-		$(this).closest('.media').find('.btn-remove-image').addClass('hidden');
+        thisBtnMedia = $(this);
 
-	});
+        $('.btn-set-media').removeClass('hidden');
+
+        e.preventDefault();
+
+        $('.btn-load-more-media').click();
+
+        $('#modal-media').removeClass('hidden');
+
+    });
+
+    $('.btn-close-media').click(function(e) {
+
+        e.preventDefault();
+
+        $('#modal-media').addClass('hidden');
+
+    });
+
+    $('.btn-set-media').click(function(e) {
+
+        e.preventDefault();
+
+        let mediaId = $('#modal-detail-media').find('[name="media_id"]').val();
+        let url = $('#modal-detail-media').find('[name="url"]').val();
+
+        thisBtnMedia.closest('.media').find('input').val(mediaId);
+        thisBtnMedia.closest('.media').find('img').attr('src', url);
+        thisBtnMedia.closest('.media').find('.image').removeClass('hidden');
+        thisBtnMedia.closest('.media').find('.btn-open-media').addClass('hidden');
+        thisBtnMedia.closest('.media').find('.btn-remove-image').removeClass('hidden');
+
+        $('#modal-media').addClass('hidden');
+        $('#modal-detail-media').addClass('hidden');
+
+    });
+
+    $('.btn-remove-image').click(function(e) {
+
+        e.preventDefault();
+
+        $(this).closest('.media').find('input').val(0);
+        $(this).closest('.media').find('img').attr('src', '');
+        $(this).closest('.media').find('.image').addClass('hidden');
+        $(this).closest('.media').find('.btn-open-media').removeClass('hidden');
+        $(this).closest('.media').find('.btn-remove-image').addClass('hidden');
+
+    });
+
+    $('#search_media').keyup(function(event) {
+
+        let inpSearch = $(this).val().trim();
+        let mediaType = $('[name="media_type"] :selected').val().trim();
+
+        const formData = new FormData();
+        formData.append('search', inpSearch);
+
+        if (mediaType) {
+            formData.append('media_type', mediaType);
+        }
+
+        $.ajax({
+            url: urlMediaSearchDec,
+            type: 'POST',
+            headers: {
+                'X-CSRF-TOKEN': token
+            },
+            data: formData,
+            contentType: false,
+            processData: false,
+            success: function(data) {
+
+                if (data.status) {
+
+                    $('.media-list').empty();
+
+                    $.each(data.medias, function(key, value) {
+
+                        $('.media-list').append(`
+							<div class="media col-span-2">
+								<div class="btn-detail-media border cursor-pointer rounded-lg overflow-hidden">
+									<img data-media-id="${value.id}" class="object-cover w-full h-36"
+										src="${value.guid}"
+										alt="${value.title}">
+								</div>
+							</div>
+						`);
+
+                    });
+
+                    $('.showing').text(data.medias.length);
+
+                    $('.count-media').text(data.count_media);
+
+                }
+
+            },
+            error: function(err, textStatus, errorThrown) {
+                let response = err.responseJSON;
+
+                if (response && response.message) {
+                    alert('Error: ' + response.message);
+                } else {
+                    alert('Terjadi kesalahan: ' + errorThrown);
+                }
+
+                console.error('Detail error:', err);
+            }
+        });
+
+    });
 
 });

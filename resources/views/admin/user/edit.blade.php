@@ -3,12 +3,11 @@
 @section('title', 'Edit User')
 
 @php
-
-    $user_id = $user->id;
-    $name = $user->name;
-    $slug = $user->slug;
-    $email = $user->email;
-    $role_id = $user->role_id;
+    $user_id  = $user->id;
+    $name     = $user->name;
+    $slug     = $user->slug;
+    $email    = $user->email;
+    $role_id  = $user->role_id;
     $image_id = $user->image_id;
 
 @endphp

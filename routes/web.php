@@ -42,6 +42,7 @@ Route::middleware(['auth'])->group(function () {
     Route::get('/admin/media/detail', [MediaController::class, 'detail'])->name('admin-media-detail');
     Route::put('/admin/media/{id?}', [MediaController::class, 'update'])->name('admin-media-update');
     Route::delete('/admin/media/{id?}', [MediaController::class, 'destroy'])->name('admin-media-destroy');
+    Route::post('/admin/media/search', [MediaController::class, 'search'])->name('admin-media-search');
 
     Route::get('/admin/logout', [AuthController::class, 'logout'])->name('auth-admin-logout');
 
