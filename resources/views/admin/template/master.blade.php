@@ -6,18 +6,18 @@
 <body>
 
     <div>
-        
+
         @include('admin.template.sidebar')
 
-            @yield('media')
+        @yield('media')
 
         <div class="lg:pl-72">
-            
+
             @include('admin.template.navbar')
 
             <main class="py-10">
                 <div class="px-4 sm:px-6 lg:px-8">
-                    
+
                     @yield('content')
 
                 </div>
@@ -26,6 +26,8 @@
     </div>
 
     @include('admin.template.script')
+
+    @yield('wysiwyg-editor-script')
 
     @yield('script')
 

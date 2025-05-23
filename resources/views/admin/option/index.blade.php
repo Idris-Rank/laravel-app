@@ -1,18 +1,18 @@
 @extends('admin.template.master')
 
-@section('title', 'Roles')
+@section('title', 'Option')
 
 @section('content')
 
     <div class="space-y-4">
         <div>
             <div class="flex gap-4 items-center">
-                <h1 class="text-2xl font-medium">Roles</h1>
+                <h1 class="text-2xl font-medium">Options</h1>
                 <div
                     class="group h-8 w-auto shrink-0 rounded font-semibold px-3 py-2 cursor-pointer text-indigo-500 hover:text-indigo-900 border border-indigo-500 hover:border-indigo-900 shadow-sm hover:shadow-base transition duration-300 inline-flex gap-x-1 justify-between items-center">
-                    <a href="{{ route('admin-role-create') }}"
+                    <a href="{{ route('admin-option-create') }}"
                         class="whitespace-nowrap text-xs sm:text-sm font-medium tracking-normal">
-                        Add Role
+                        Add Option
                     </a>
                 </div>
             </div>
@@ -20,8 +20,8 @@
 
         @include('admin.template.components.alert')
 
-        <div class="flow-root">
-            <div class="flex justify-end mb-2">
+        <div class="flow-root space-y-2">
+            <div class="flex justify-end">
                 <form method="GET">
                     <div class="flex gap-4 items-center">
                         <div>
@@ -44,53 +44,50 @@
                                 <th scope="col" class="px-2.5 py-2 text-left text-xs font-semibold text-white">No.</th>
                                 <th scope="col" class="px-2.5 py-2 text-left text-xs font-semibold text-white">
                                     <div class="flex gap-1.5 items-center">
-                                        <span class="inline-block">Name</span>
+                                        <span class="inline-block">Option Name</span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-2.5 py-2 text-left text-xs font-semibold text-white">
                                     <div class="flex gap-1.5 items-center">
-                                        <span class="inline-block">Slug</span></svg>
-                                        </a>
+                                        <span class="inline-block">Option Value</span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-2.5 py-2 text-left text-xs font-semibold text-white">
                                     <div class="flex gap-1.5 items-center">
-                                        <span class="inline-block">Count</span>
+                                        <span class="inline-block">Created At</span>
                                     </div>
                                 </th>
                                 <th scope="col" class="px-2.5 py-2 text-left text-xs font-semibold text-white">
                                     <div class="flex gap-1.5 items-center">
-                                        <span class="inline-block whitespace-nowrap">Created at</span>
+                                        <span class="inline-block">Updated At</span>
                                     </div>
                                 </th>
-                                <th scope="col" class="px-2.5 py-2 text-left text-xs font-semibold text-white">
-                                    <div class="flex gap-1.5 items-center">
-                                        <span class="inline-block whitespace-nowrap">Updated at</span>
-                                    </div>
-                                </th>
-                                <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-white text-center">
-                                    Action</th>
+                                <th scope="col" class="px-3 py-2 text-left text-xs font-semibold text-white">Action</th>
                             </tr>
                         </thead>
                         <tbody>
+
                             @php
 
-                                $per_page = $roles->perPage();
-                                $current_page = $roles->currentPage();
+                            $per_page = $options->perPage();
+                            $current_page = $options->currentPage();
 
-                                $no = $current_page * $per_page - $per_page;
+                            $no = ($current_page * $per_page) - $per_page;
 
                             @endphp
-                            @foreach ($roles as $k_role => $v_role)
+
+                            @foreach ($options as $k_option => $v_option)
                                 @php
+
                                     $no++;
-                                    $role_id = $v_role->id;
-                                    $name = $v_role->name;
-                                    $slug = $v_role->slug;
-                                    $count = $v_role->count;
-                                    $created_at = $v_role->created_at;
-                                    $updated_at = $v_role->updated_at;
+                                    $option_id = $v_option->id;
+                                    $option_name = $v_option->option_name;
+                                    $option_value = $v_option->option_value;
+                                    $created_at = $v_option->created_at;
+                                    $updated_at = $v_option->updated_at;
+
                                 @endphp
+
                                 <tr class="even:bg-gray-100 odd:bg-white">
                                     <td class="text-center px-2.5 py-2 text-xs text-gray-700">
                                         <div class="flex gap-2 items-center justify-center">
@@ -98,13 +95,10 @@
                                         </div>
                                     </td>
                                     <td class="px-2.5 py-2 text-xs text-gray-700 w-full">
-                                        <span>{{ $name }}</span>
+                                        <span>{{ $option_name }}</span>
                                     </td>
-                                    <td class="px-2.5 py-2 text-xs text-gray-700">
-                                        <span>{{ $slug }}</span>
-                                    </td>
-                                    <td class="px-2.5 py-2 text-xs text-gray-700 whitespace-nowrap text-center">
-                                        <span>{{ $count }}</span>
+                                    <td class="px-2.5 py-2 text-xs text-gray-700 w-full whitespace-nowrap">
+                                        <span>{{ $option_value }}</span>
                                     </td>
                                     <td class="px-2.5 py-2 text-xs text-gray-700 whitespace-nowrap">
                                         <span>{{ $created_at }}</span>
@@ -112,9 +106,9 @@
                                     <td class="px-2.5 py-2 text-xs text-gray-700 whitespace-nowrap">
                                         <span>{{ $updated_at }}</span>
                                     </td>
-                                    <td class="action px-2.5 py-2 text-xs text-gray-700 text-center">
+                                    <td class="action px-2.5 py-2 text-xs text-c0-700 text-center">
                                         <div class="flex gap-1.5 items-center justify-center w-full">
-                                            <a href="{{ route('admin-role-edit', ['id' => $role_id]) }}" title="Edit role"
+                                            <a href="{{ route('admin-option-edit', ['id' => $option_id]) }}" title="Edit option"
                                                 class="text-white inline-block px-1.5 py-1 rounded-sm bg-green-600 hover:bg-green-700">
                                                 <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24"
                                                     stroke-width="2" stroke="currentColor" class="w-4 h-4">
@@ -124,17 +118,17 @@
                                                 </svg>
                                             </a>
                                             <form class="flex items-center" method="POST"
-                                                action="{{ route('admin-role-destroy', ['id' => $role_id]) }}">
+                                                action="{{ route('admin-option-destroy', ['id' => $option_id]) }}">
                                                 @csrf
                                                 @method('DELETE')
-                                                <button type="submit" title="Delete role"
+                                                <button type="submit" title="Delete option"
                                                     class="text-white inline-block px-1.5
                                                     py-1 rounded-sm bg-red-600 hover:bg-red-700">
                                                     <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                         viewBox="0 0 24 24" stroke-width="2" stroke="currentColor"
                                                         class="w-4 h-4">
                                                         <path stroke-linecap="round" stroke-linejoin="round"
-                                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916gray-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
+                                                            d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0" />
                                                     </svg>
 
                                                 </button>
@@ -144,20 +138,16 @@
                                 </tr>
                             @endforeach
 
-
+                            
                         </tbody>
                     </table>
                     <div class="py-2">
-                        {{ $roles->links('admin.template.components.pagination') }}
+                        {{ $options->links('admin.template.components.pagination') }}
                     </div>
                 </div>
             </div>
         </div>
     </div>
-
-
-
-@endsection
 
 @section('script')
     <script>
@@ -167,4 +157,6 @@
 
         });
     </script>
+@endsection
+
 @endsection

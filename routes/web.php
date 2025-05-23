@@ -5,6 +5,8 @@ use App\Http\Controllers\UserController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\MediaController;
+use App\Http\Controllers\OptionController;
+use App\Http\Controllers\PostController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -21,6 +23,13 @@ use Illuminate\Support\Facades\Route;
 Route::middleware(['auth'])->group(function () {
 
     Route::get('/admin/dashboard', [DashboardController::class, 'index'])->name('admin-dashboard');
+
+    Route::get('/admin/post', [PostController::class, 'index'])->name('admin-post');
+    Route::get('/admin/post/create', [PostController::class, 'create'])->name('admin-post-create');
+    Route::post('/admin/post', [PostController::class, 'store'])->name('admin-post-store');
+    Route::get('/admin/post/edit/{id}', [PostController::class, 'edit'])->name('admin-post-edit');
+    Route::put('/admin/post/{id}', [PostController::class, 'update'])->name('admin-post-update');
+    Route::delete('/admin/post/{id}', [PostController::class, 'destroy'])->name('admin-post-destroy');
 
     Route::get('/admin/role', [RoleController::class, 'index'])->name('admin-role');
     Route::get('/admin/role/create', [RoleController::class, 'create'])->name('admin-role-create');
@@ -43,6 +52,13 @@ Route::middleware(['auth'])->group(function () {
     Route::put('/admin/media/{id?}', [MediaController::class, 'update'])->name('admin-media-update');
     Route::delete('/admin/media/{id?}', [MediaController::class, 'destroy'])->name('admin-media-destroy');
     Route::post('/admin/media/search', [MediaController::class, 'search'])->name('admin-media-search');
+
+    Route::get('/admin/option', [OptionController::class, 'index'])->name('admin-option');
+    Route::get('/admin/option/create', [OptionController::class, 'create'])->name('admin-option-create');
+    Route::post('/admin/option', [OptionController::class, 'store'])->name('admin-option-store');
+    Route::get('/admin/option/edit/{id}', [OptionController::class, 'edit'])->name('admin-option-edit');
+    Route::put('/admin/option/{id}', [OptionController::class, 'update'])->name('admin-option-update');
+    Route::delete('/admin/option/{id}', [OptionController::class, 'destroy'])->name('admin-option-destroy');
 
     Route::get('/admin/logout', [AuthController::class, 'logout'])->name('auth-admin-logout');
 

@@ -3,6 +3,11 @@
 	<meta name="csrf-token" content="{{ csrf_token() }}">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@yield('title') - ADMIN</title>
+
+	<link rel="stylesheet" href="{{ asset('admin/css/style.css') }}">
+
+	@yield('wysiwyg-editor-style')
+
 	<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@300;400;500;600;700;800&display=swap" rel="stylesheet"> 
 	<script src="https://cdn.tailwindcss.com?plugins=forms,typography,aspect-ratio"></script>
 	<script>    

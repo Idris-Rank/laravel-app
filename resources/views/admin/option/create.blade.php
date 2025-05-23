@@ -1,45 +1,50 @@
 @extends('admin.template.master')
 
-@section('title', 'Create Role')
+@section('title', 'Create Option')
+
+@section('media')
+
+@include('admin.template.components.media')
+
+@endsection
 
 @section('content')
 
     <div class="space-y-4">
         <div class="flex gap-4 items-center">
-            <h1 class="text-2xl font-medium">Create role</h1>
+            <h1 class="text-2xl font-medium">Create option</h1>
         </div>
 
         @include('admin.template.components.alert')
 
-        <form action="{{ route('admin-role-store') }}" method="post" enctype="multipart/form-data">
+        <form action="{{ route('admin-option-store') }}" method="post" enctype="multipart/form-data">
             @csrf
             <div class="space-y-12">
                 <div class="grid grid-cols-12 gap-4">
                     <div class="col-span-12 md:col-span-8">
                         <div class="grid grid-cols-12 gap-x-6 gap-y-2">
-                            <div class="col-span-6">
-                                <label for="name" class="block text-sm font-medium leading-6 text-gray-900">Name</label>
+                            <div class="col-span-12">
+                                <label for="option-name" class="block text-sm font-medium leading-6 text-gray-900">Option Name</label>
                                 <div class="mt-1">
-                                    <input type="text" name="name" id="name" autocomplete="given-name"
-                                        value="{{ old('name') ?? '' }}" placeholder="Admin"
+                                    <input type="text" name="option_name" id="option-name"
+                                        value="{{ old('option_name') ?? '' }}" placeholder="Home url"
                                         class="block w-full rounded-md border-0 py-1.5  shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                                    @error('name')
+                                    @error('option_name')
                                         <div class="mt-1 text-sm text-red-600">{{ $message }}</div>
                                     @enderror
                                 </div>
 
                             </div>
 
-                            <div class="col-span-6">
-                                <label for="slug" class="block text-sm font-medium leading-6 text-gray-900">Slug</label>
+                            <div class="col-span-12">
+                                <label for="option-value" class="block text-sm font-medium leading-6 text-gray-900">Option Value</label>
                                 <div class="mt-1">
-                                    <input type="text" name="slug" id="slug" autocomplete="family-name"
-                                        value="{{ old('slug') ?? '' }}" placeholder="admin"
-                                        class="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">
-                                    @error('slug')
+                                    <textarea name="option_value" id="option-value" rows="2" placeholder="www.example.com" class="block w-full rounded-md border-0 py-1.5  shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">{{ old('option_value') ?? '' }}</textarea>
+                                        @error('option_value')
                                         <div class="mt-1 text-sm text-red-600">{{ $message }}</div>
                                     @enderror
                                 </div>
+
                             </div>
                         </div>
                     </div>
@@ -68,14 +73,13 @@
                                     </button>
                                 </div>
                             </div>
+
                         </div>
                     </div>
                 </div>
             </div>
         </form>
     </div>
-
-
 
 @endsection
 
