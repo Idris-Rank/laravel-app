@@ -28,7 +28,7 @@ if (!function_exists('app_url')) {
 if (!function_exists('post_status')) {
 	function post_status($key) {
 
-		$status = [1 => 'Publish', 'Draft', 'Pending', 'Private', 'Future', 'Trash'];
+		$status = [1 => 'Publish', 'Draft', 'Trash', 'Pending', 'Private', 'Future'];
 
 		return isset($status[$key]) ? $status[$key] : $status[2];
 	}

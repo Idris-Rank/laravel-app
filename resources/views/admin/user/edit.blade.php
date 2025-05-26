@@ -204,7 +204,7 @@
                                                 @endphp
 
                                                 <div class="image">
-                                                    <div class="w-full h-full rounded-md overflow-hidden">
+                                                    <div class="w-full h-64 rounded-md overflow-hidden">
                                                         <img src="{{ $image_url }}"
                                                             class="h-full w-full object-cover">
                                                         <input type="hidden" name="image"
@@ -213,7 +213,7 @@
                                                 </div>
                                             @else
                                                 <div class="image hidden">
-                                                    <div class="w-full h-full rounded-md overflow-hidden">
+                                                    <div class="w-full h-64 rounded-md overflow-hidden">
                                                         <img src="" class="h-full w-full object-cover">
                                                         <input type="hidden" name="image" value="0">
                                                     </div>

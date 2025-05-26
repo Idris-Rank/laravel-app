@@ -30,7 +30,7 @@ class Post extends Model
         return $this->belongsTo(User::class, 'user_editor_id', 'id');
     }
 
-    public function image()
+    public function media()
     {
         return $this->belongsTo(Media::class, 'image_id');
     }

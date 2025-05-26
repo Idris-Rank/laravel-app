@@ -25,7 +25,7 @@
                         <div class="grid grid-cols-12 gap-4 w-full">
                             <div class="col-span-8">
                                 <img src=""
-                                    class="object-cover rounded-md transition duration-300 ease-in-out group-hover:scale-110 w-full h-full"
+                                    class="object-cover rounded-md transition duration-300 ease-in-out group-hover:scale-110 w-full max-h-full"
                                     alt="">
                             </div>
                             <div class="col-span-4">

@@ -187,7 +187,7 @@
                                             </div>
 
                                             <div class="image hidden">
-                                                <div class="w-full h-full rounded-md overflow-hidden">
+                                                <div class="w-full h-64 rounded-md overflow-hidden">
                                                     <img src="" class="h-full w-full object-cover">
                                                     <input type="hidden" name="image" value="0">
                                                 </div>

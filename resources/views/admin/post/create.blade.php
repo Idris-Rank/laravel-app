@@ -4,13 +4,13 @@
 
 @section('wysiwyg-editor-style')
 
-@include('admin.template.components.wysiwyg-style')
+    @include('admin.template.components.wysiwyg-style')
 
 @endsection
 
 @section('media')
 
-@include('admin.template.components.media')
+    @include('admin.template.components.media')
 
 @endsection
 
@@ -30,7 +30,8 @@
                     <div class="col-span-12 md:col-span-8">
                         <div class="grid grid-cols-12 gap-x-6 gap-y-2">
                             <div class="col-span-12">
-                                <label for="title" class="block text-sm font-medium leading-6 text-gray-900">Title</label>
+                                <label for="title"
+                                    class="block text-sm font-medium leading-6 text-gray-900">Title</label>
                                 <div class="mt-1">
                                     <input type="text" name="title" id="title" autocomplete="off"
                                         value="{{ old('title') ?? '' }}" placeholder="Enter title"
@@ -42,9 +43,11 @@
 
                             </div>
                             <div class="col-span-12">
-                                <label for="content" class="block text-sm font-medium leading-6 text-gray-900">Content</label>
+                                <label for="content"
+                                    class="block text-sm font-medium leading-6 text-gray-900">Content</label>
                                 <div class="mt-1">
-                                    <textarea name="content" id="content" rows="4" class="wysiwyg-editor block w-full rounded-md border-0 py-1.5  shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">{{ old('content') ?? '' }}</textarea>
+                                    <textarea name="content" id="content" rows="4"
+                                        class="wysiwyg-editor block w-full rounded-md border-0 py-1.5  shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6">{{ old('content') ?? '' }}</textarea>
                                     @error('content')
                                         <div class="mt-1 text-sm text-red-600">{{ $message }}</div>
                                     @enderror
@@ -62,9 +65,27 @@
                                     </div>
                                 </div>
 
-                                <div class="p-4 space-y-4 flex justify-end">
-                                    <button type="submit"
-                                        class="btn-save group h-10 w-auto shrink-0 rounded font-semibold px-3 py-2 cursor-pointer text-white bg-indigo-500 border border-indigo-600 hover:border-indigo-400 shadow-sm hover:shadow-base transition duration-300 inline-flex gap-x-1 justify-between items-center">
+                                <div class="p-4 space-y-4">
+
+                                    <div>
+                                        <button type="submit" name="status" value="2"
+                                            class="group h-10 w-auto shrink-0 rounded font-semibold px-3 py-2 cursor-pointer text-indigo-500 hover:text-indigo-900 border border-indigo-500 hover:border-indigo-900 shadow-sm hover:shadow-base transition duration-300 inline-flex gap-x-1 justify-between items-center">
+
+                                            <svg class="h-5 w-5 shrink-0 mr-1" fill="currentColor"
+                                                xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+                                                <path
+                                                    d="M48 96l0 320c0 8.8 7.2 16 16 16l320 0c8.8 0 16-7.2 16-16l0-245.5c0-4.2-1.7-8.3-4.7-11.3l33.9-33.9c12 12 18.7 28.3 18.7 45.3L448 416c0 35.3-28.7 64-64 64L64 480c-35.3 0-64-28.7-64-64L0 96C0 60.7 28.7 32 64 32l245.5 0c17 0 33.3 6.7 45.3 18.7l74.5 74.5-33.9 33.9L320.8 84.7c-.3-.3-.5-.5-.8-.8L320 184c0 13.3-10.7 24-24 24l-192 0c-13.3 0-24-10.7-24-24L80 80 64 80c-8.8 0-16 7.2-16 16zm80-16l0 80 144 0 0-80L128 80zm32 240a64 64 0 1 1 128 0 64 64 0 1 1 -128 0z">
+                                                </path>
+                                            </svg>
+                                            <span class="whitespace-nowrap text-xs sm:text-sm font-medium tracking-normal">
+                                                Save Draft
+                                            </span>
+                                        </button>
+                                    </div>
+
+                                    <div class="flex gap-2 items-center justify-end w-full">
+                                    <button type="submit" name="status" value="1"
+                                        class="group h-10 w-auto shrink-0 rounded font-semibold px-3 py-2 cursor-pointer text-white bg-indigo-500 border border-indigo-600 hover:border-indigo-400 shadow-sm hover:shadow-base transition duration-300 inline-flex gap-x-1 justify-between items-center">
 
                                         <svg class="h-5 w-6 shrink-0 mr-1" fill="currentColor"
                                             xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -73,9 +94,11 @@
                                             </path>
                                         </svg>
                                         <span class="whitespace-nowrap text-xs sm:text-sm font-medium tracking-normal">
-                                            Save
+                                            Publish
                                         </span>
                                     </button>
+                                    </div>
+                                    
                                 </div>
                             </div>
 
@@ -111,12 +134,12 @@
                                             </div>
 
                                             <div class="image hidden">
-                                                <div class="w-full h-full rounded-md overflow-hidden">
+                                                <div class="w-full h-64 rounded-md overflow-hidden">
                                                     <img src="" class="h-full w-full object-cover">
                                                     <input type="hidden" name="image" value="0">
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
                                         <div
                                             class="btn-remove-image hidden cursor-pointer hover:text-indigo-600 text-sm underline text-indigo-500">
@@ -136,7 +159,7 @@
 
 @section('wysiwyg-editor-script')
 
-@include('admin.template.components.wysiwyg-script')
+    @include('admin.template.components.wysiwyg-script')
 
 @endsection
 
