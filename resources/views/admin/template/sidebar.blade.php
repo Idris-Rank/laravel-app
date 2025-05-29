@@ -220,7 +220,7 @@
                     </ul>
                 </li>
                 <li class="mt-auto">
-                    <a href="#"
+                    <a href="{{ route('admin-user-edit', ['id' => Auth::user()->id]) }}"
                         class="group -mx-2 flex gap-x-3 rounded-md p-2 text-sm/6 font-semibold text-indigo-200 hover:bg-indigo-700 hover:text-white">
                         <svg class="w-6 h-6 shrink-0 text-indigo-200 group-hover:text-white" fill="none"
                             viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" aria-hidden="true"
