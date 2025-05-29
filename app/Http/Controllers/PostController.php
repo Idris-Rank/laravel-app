@@ -189,7 +189,7 @@ class PostController extends Controller
 
                 Log::error($e->getMessage());
 
-                return redirect()->back()->with('error', 'Failed memperbarui data.')->withInput();
+                return redirect()->back()->with('error', 'Failed update data.')->withInput();
             }
         }else{
 
@@ -225,7 +225,7 @@ class PostController extends Controller
 
                 Log::error($e->getMessage());
 
-                return redirect()->back()->with('error', 'Failed memperbarui data.')->withInput();
+                return redirect()->back()->with('error', 'Failed update data.')->withInput();
             }
         }else{
 
@@ -260,7 +260,7 @@ class PostController extends Controller
 
                 Log::error($e->getMessage());
 
-                return redirect()->back()->with('error', 'Failed memperbarui data.')->withInput();
+                return redirect()->back()->with('error', 'Failed update data.')->withInput();
             }
         }else{
 

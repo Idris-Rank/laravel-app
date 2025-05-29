@@ -21,16 +21,17 @@
                         </div>
                     </div>
 
-                    <div class="h-full sm:flex w-full gap-4 overflow-y-auto sm:overflow-hidden">
-                        <div class="grid grid-cols-12 gap-4 w-full">
-                            <div class="col-span-8">
+                    <div class="h-full w-full gap-4 overflow-y-auto sm:overflow-hidden">
+
+                        <div class="flex h-full gap-6">
+                            <div class="w-2/3">
                                 <img src=""
-                                    class="object-cover rounded-md transition duration-300 ease-in-out group-hover:scale-110 w-full max-h-full"
+                                    class="h-full w-full rounded-md object-contain bg-gray-100"
                                     alt="">
                             </div>
-                            <div class="col-span-4">
-                                <div class="grid content-between h-full">
-                                    <input type="hidden" name="media_id" id="media_id" value="">
+
+                            <div class="w-1/3 flex flex-col h-full justify-between">
+                                <input type="hidden" name="media_id" id="media_id" value="">
                                     <div class="space-y-2">
                                         <div>
                                             <label for="title"
@@ -78,7 +79,6 @@
                                             <button type="button"
                                             class="btn-set-media hidden inline-flex w-full justify-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm text-nowrap hover:bg-green-500"><span>Set Media</span></button>
                                     </div>
-                                </div>
                             </div>
                         </div>
                     </div>
