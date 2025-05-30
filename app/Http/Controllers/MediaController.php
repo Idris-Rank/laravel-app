@@ -70,6 +70,7 @@ class MediaController extends Controller
                 $data_store['user_id']    = Auth::user()->id;
                 $data_store['created_at'] = now();
                 $data_store['updated_at'] = now();
+                
 
                 $media = Media::create($data_store);
 
